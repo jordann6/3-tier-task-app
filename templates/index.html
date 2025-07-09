@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Flask Task App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        background-color: #121212;
+        color: #f1f1f1;
+        font-family: "Segoe UI", sans-serif;
+        padding: 2rem;
+      }
+      h1 {
+        color: #00adb5;
+      }
+      form {
+        margin-bottom: 2rem;
+      }
+      input[type="text"] {
+        padding: 0.5rem;
+        width: 300px;
+      }
+      button {
+        padding: 0.5rem 1rem;
+        background-color: #00adb5;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+      li {
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        background-color: #1f1f1f;
+        display: flex;
+        justify-content: space-between;
+      }
+      .actions a {
+        margin-left: 1rem;
+        color: #00adb5;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>My Task List</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <ul>
+      {% for category, message in messages %}
+      <li><strong>{{ category.title() }}:</strong> {{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+
+    <form method="POST" action="{{ url_for('add_task') }}">
+      {{ form.hidden_tag() }} {{ form.title(size=40) }} {{ form.submit() }}
+    </form>
+
+    <ul>
+      {% for task in tasks %}
+      <li>
+        {{ task.title }} — {{ task.status }}
+        <span class="actions">
+          <a href="{{ url_for('update_task', task_id=task.id) }}"
+            >Mark Complete</a
+          >
+          <a href="{{ url_for('delete_task', task_id=task.id) }}">Delete</a>
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
